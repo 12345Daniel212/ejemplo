@@ -1,0 +1,57 @@
+UNIDAD 2
+
+METODOS DE SOLUCION DE ECUACIONES
+
+2.1 metodos de intervalo
+2.2 metodos de biseccion
+2.3 metodos de
+
+
+
+
+
+METODOS DE INTERVALO
+
+lso metodos de intervalo son tecnicas que se utilizan para encontrar soluciones
+aproximadas de ecuaciones y sistemas de ecuaciones, limitando la solucion a un intervalo dado
+en lugar de proporcionar un valor unico.
+
+tambien son uitilez cuando se trabaja con funciones no lineales o complicadas, donde no es posible
+resolver la ecuacion de manera analitica.
+
+estos metodos solo proporcionan soluciones aproximadas y pueden requierir un numero variable de iteraciones
+para converger hacia una solucion aceptable.
+
+los metodos de intervalo tambien son conocidas como metodos CERRADOS, son tecnicas numericas utilizadas para localizar las raices
+de una ecuacion aprovechando el hecho de que una funcion cambia de signo en la vecindad de una raiz real.
+
+estos metodos se caracterizan por requerir 2 valores que deben encerrar o estar a ambos lados de la raiz.
+
+CARACTERISTICAS PRINCIPALES
+encierro de la raiz: se bansa en el teorema del valor intermedio, el cual establece que si una funcio
+convergencia
+
+velocidad: aunque son muy confliables y estables, su principal desventanja es que la velocidad de convergencia.
+
+
+
+METODOS PRINCIPALES
+ME. de biseccion: es un tipo de busqueda incremental donde le intervalo se divide siempre a la mitad, si la funcion cambia de signo.
+
+ME. de la falsa Posicion: tambien llamdao me. de interpolacion lineal. a diferencia de la biseccion, este metodo une los puntos de la funcion
+
+ME. grafico: aunque es una tecnica simple y visual. se utiliza como preambulo para obtener estimaciones iniciales de las raices y observar
+el comportamiento de la funcion antes de aplicar merodos mas precisos.
+
+
+
+
+METODOS DE GAUSS SEIDEL
+este metodo se utiliza para resolver sistemas de ecuaciones lineales. se comienza con una estimacion inicial para todas las incognitas y
+luego se realiza una serei de iteraciones donde en cada paso se resuelve una ecuacion para una de las incognitas, utilizando las estimaciones mas recientes
+de las otras incognitas.
+
+1. se despeja cada ecuacion para una incognita
+2. propone una aproximacion para una incognita
+3. se actualizan los valores uno por uno
+3. se repite hasta que el error sea pequeno 
