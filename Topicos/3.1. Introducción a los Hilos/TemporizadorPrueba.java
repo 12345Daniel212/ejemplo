@@ -1,11 +1,33 @@
-public class TemporizadorPrueba extends JFrame{
-  public static void main(String[] args){
-    Runnable r1 = new Temporizador(5, 1);
-    Thread t1 = new Thread(r1);
-    t1.start();
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-    Runnable r2 = new Temporizador(10, 2);
-    Thread t2 = new Thread(r2);
-    t2.start();
-  }
+public class TemporizadorPrueba extends JFrame {
+    private int contadorHilos = 0;
+
+    public TemporizadorPrueba() {
+        setTitle("Control de Temporizadores");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        JButton botonIniciar = new JButton("Iniciar Nuevo Temporizador");
+        add(botonIniciar);
+
+        botonIniciar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                contadorHilos++;
+                Runnable r = new Temporizador(10, contadorHilos);
+                Thread t = new Thread(r);
+                t.start();
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+        new TemporizadorPrueba().setVisible(true);
+        });
+    }
 }
