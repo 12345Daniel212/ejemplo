@@ -1,4 +1,3 @@
-package Topicos.Memoria;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Random;
@@ -10,7 +9,10 @@ public class memoria5b extends JFrame {
     private int errores = 0;
     private int aciertos = 0;
     private JLabel marcadorLbl;
-    private boolean esperando = false; // Para evitar clics extra durante el timer
+    private int segundosTranscurridos = 0;
+    private JLabel lblTimer;
+    private Timer cronometro;
+    private boolean esperando = false;
 
     public memoria5b() {
         inializarComponentes();
@@ -33,14 +35,18 @@ public class memoria5b extends JFrame {
         marcadorLbl.setFont(new Font("Arial", Font.BOLD, 18));
         panelSuperior.add(marcadorLbl);
 
+        lblTimer = new JLabel("Tiempo: 00:00 S");
+        lblTimer.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTimer.setForeground(Color.BLACK);
+        panelSuperior.add(lblTimer);
+
         Font font = new Font("Arial", Font.BOLD, 18);
 
-        //panel central
+        // panel central
         JButton[] tarjetasBtn = new JButton[16];
         for (int i = 0; i < tarjetasBtn.length; i++) {
             tarjetasBtn[i] = new JButton();
             tarjetasBtn[i].setFont(font);
-            // Ocultar texto inicialmente igualando color de fuente al del botón
             tarjetasBtn[i].setForeground(new Color(240, 240, 240));
             tarjetasBtn[i].addActionListener(evento -> tarjetaClick(evento));
             panelCentral.add(tarjetasBtn[i]);
@@ -59,19 +65,26 @@ public class memoria5b extends JFrame {
                 tarjetasBtn[index].setText(palabra);
             }
         }
-    }
+        iniciarCronometro();
 
+    }
+    private void iniciarCronometro() {
+        cronometro = new Timer(1000, e -> {
+            segundosTranscurridos++;
+            lblTimer.setForeground(Color.BLACK);
+            lblTimer.setText(String.format("Tiempo: %02d:%02d S", segundosTranscurridos / 60, segundosTranscurridos % 60));
+        });
+        cronometro.start();
+    }
     private void tarjetaClick(ActionEvent evento) {
         if (esperando)
-            return; // Si el timer está corriendo, no hace nada
+            return;
 
         JButton tarjetaActiva = (JButton) evento.getSource();
 
-        // Evitar clickear la misma o una ya desactivada
         if (tarjetaActiva == primeraTarjeta || !tarjetaActiva.isEnabled())
             return;
 
-        // Mostrar texto
         tarjetaActiva.setForeground(Color.BLACK);
 
         if (primeraTarjeta == null) {
@@ -85,7 +98,9 @@ public class memoria5b extends JFrame {
                 aciertos++;
 
                 if (aciertos == 8) {
-                    JOptionPane.showMessageDialog(this, "¡Felicidades! Ganaste.");
+                    cronometro.stop();
+                    String tiempoFinal = String.format("%02d:%02d S", segundosTranscurridos / 60, segundosTranscurridos % 60);
+                    JOptionPane.showMessageDialog(this, "¡Felicidades! Ganaste. Tiempo total: " + tiempoFinal + ", Errores totales: " + errores);
                 }
             } else {
                 // ERROR
