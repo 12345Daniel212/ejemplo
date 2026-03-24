@@ -21,7 +21,6 @@ public class memoria5b extends JFrame {
         setSize(1100, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        // setLayout(new GridLayout(4, 4, 10, 10));
         setLayout(new BorderLayout());
 
         JPanel panelSuperior = new JPanel(new FlowLayout());
