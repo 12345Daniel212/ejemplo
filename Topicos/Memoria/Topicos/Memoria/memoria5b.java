@@ -68,14 +68,14 @@ public class memoria5b extends JFrame {
         iniciarCronometro();
 
     }
-    private void iniciarCronometro() {
-        cronometro = new Timer(1000, e -> {
-            segundosTranscurridos++;
-            lblTimer.setForeground(Color.BLACK);
-            lblTimer.setText(String.format("Tiempo: %02d:%02d S", segundosTranscurridos / 60, segundosTranscurridos % 60));
-        });
-        cronometro.start();
-    }
+        private void iniciarCronometro() {
+            cronometro = new Timer(1000, e -> {
+                segundosTranscurridos++;
+                String tiempoFormateado = String.format("%02d:%02d S", segundosTranscurridos / 60, segundosTranscurridos % 60);
+                lblTimer.setText("Tiempo: " + tiempoFormateado);
+            });
+            cronometro.start();
+        }
     private void tarjetaClick(ActionEvent evento) {
         if (esperando)
             return;
