@@ -1,5 +1,11 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class calculadora extends JFrame {
 
@@ -17,9 +23,7 @@ public class calculadora extends JFrame {
         pantalla.setHorizontalAlignment(JTextField.RIGHT);
         panelTexto.add(pantalla, BorderLayout.CENTER);
 
-        // 2. Panel de los Botones (Centro)
-        // Usa GridLayout para organizar los botones [cite: 5, 17, 19]
-        // Se define una rejilla de 4x4 según la imagen [cite: 20-31]
+
         JPanel panelBotones = new JPanel(new GridLayout(4, 4, 5, 5));
 
         String[] etiquetas = {

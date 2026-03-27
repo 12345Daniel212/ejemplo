@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es" class="">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post-Its Virtuales</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;700&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cork: '#bc8a5f',
+            darkCork: '#1a120b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Textura de Corcho Pro */
+    .cork-board {
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+        url('https://www.transparenttextures.com/patterns/cork-board.png');
+      background-color: #d2a679;
+      min-height: 100vh;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.4);
+    }
+
+    .dark .cork-board {
+      background-color: #1a120b;
+      background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    }
+
+    /* Post-it con fuente manuscrita */
+    .post-it {
+      font-family: 'Gochi Hand', cursive;
+      box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .post-it:hover {
+      transform: scale(1.1) rotate(0deg) !important;
+      box-shadow: 12px 12px 25px rgba(0, 0, 0, 0.4);
+      z-index: 20;
+    }
+
+    /* Chincheta (Pin) */
+    .pin {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+      background: #ff0000;
+      z-index: 10;
+    }
+
+    /* Tabs de carpetas */
+    .tab-active {
+      background: rgba(255, 255, 255, 0.2);
+      border-bottom: 4px solid white;
+    }
+
+    /* Colores según categoría */
+    .cat-Tareas {
+      background-color: #feff9c;
+      color: #333;
+    }
+
+    .cat-Trabajo {
+      background-color: #7afaff;
+      color: #333;
+    }
+
+    .cat-Ideas {
+      background-color: #ff7eb9;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body class="cork-board p-4 md:p-10">
+
+  <div class="max-w-7xl mx-auto mb-10">
+    <div
+      class="flex flex-col md:flex-row justify-between items-center bg-white/10 backdrop-blur-lg p-6 rounded-t-3xl border-t border-x border-white/20">
+      <h1 class="text-3xl font-black text-white drop-shadow-lg mb-4 md:mb-0">📌 Pizarron Virtual </h1>
+
+      <div class="flex gap-4">
+        <button onclick="toggleDarkMode()" class="p-3 bg-white/10 rounded-full hover:bg-white/20 text-white">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <button onclick="openModal()"
+          class="bg-white text-amber-900 px-8 py-3 rounded-2xl font-black hover:scale-105 transition shadow-2xl">
+          + NEW POST-IT
+        </button>
+      </div>
+    </div>
+
+    <div class="flex bg-black/20 backdrop-blur-md rounded-b-3xl overflow-hidden border-b border-x border-white/10">
+      <button onclick="fetchNotes('Todas')"
+        class="flex-1 py-3 text-white font-bold hover:bg-white/10 transition border-r border-white/5" id="tab-Todas">📂
+        Todas</button>
+      <button onclick="fetchNotes('Tareas')"
+        class="flex-1 py-3 text-white font-bold hover:bg-white/10 transition border-r border-white/5" id="tab-Tareas">📝
+        Tareas</button>
+      <button onclick="fetchNotes('Trabajo')"
+        class="flex-1 py-3 text-white font-bold hover:bg-white/10 transition border-r border-white/5"
+        id="tab-Trabajo">💼 Trabajo</button>
+      <button onclick="fetchNotes('Ideas')" class="flex-1 py-3 text-white font-bold hover:bg-white/10 transition"
+        id="tab-Ideas">💡 Ideas</button>
+    </div>
+  </div>
+
+  <div id="board" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-7xl mx-auto">
+  </div>
+
+  <div id="modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl border-4 border-white/50">
+      <h2 class="text-3xl font-black mb-6 dark:text-white">Crear Concepto</h2>
+
+      <label class="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Título</label>
+      <input type="text" id="notion-title" placeholder="¿Qué hay de nuevo?"
+        class="w-full mb-6 p-4 bg-gray-100 dark:bg-zinc-800 rounded-2xl dark:text-white outline-none focus:ring-4 ring-blue-500/30">
+
+      <label class="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Carpeta / Categoría</label>
+      <select id="notion-category"
+        class="w-full mb-6 p-4 bg-gray-100 dark:bg-zinc-800 rounded-2xl dark:text-white outline-none">
+        <option value="Tareas">Tareas</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Ideas">Ideas</option>
+      </select>
+
+      <label class="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Contenido</label>
+      <textarea id="notion-content" placeholder="Escribe aquí..."
+        class="w-full h-32 mb-8 p-4 bg-gray-100 dark:bg-zinc-800 rounded-2xl dark:text-white outline-none focus:ring-4 ring-blue-500/30 resize-none"></textarea>
+
+      <div class="flex justify-between gap-4">
+        <button onclick="closeModal()" class="flex-1 py-4 text-gray-500 font-bold hover:text-gray-700">CANCELAR</button>
+        <button onclick="saveNote()"
+          class="flex-[2] bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 shadow-xl transition active:scale-95">POSTEAR
+          IDEA</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentFilter = 'Todas';
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      const icon = document.getElementById('theme-icon');
+      icon.innerText = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+    }
+
+    function openModal() { document.getElementById('modal').classList.remove('hidden'); }
+    function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+    async function fetchNotes(filter = 'Todas') {
+      currentFilter = filter;
+
+      // Actualizar estilo visual de los tabs
+      ['Todas', 'Tareas', 'Trabajo', 'Ideas'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.remove('tab-active');
+      });
+      document.getElementById(`tab-${filter}`).classList.add('tab-active');
+
+      const res = await fetch('/api/notas');
+      let notes = await res.json();
+
+      if (filter !== 'Todas') {
+        notes = notes.filter(n => n.categoria === filter);
+      }
+
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+
+      notes.forEach((n, index) => {
+        const rotation = (Math.random() * 8 - 4).toFixed(2);
+        const colorClass = `cat-${n.categoria || 'Tareas'}`;
+        const pinColor = n.categoria === 'Ideas' ? '#000' : '#ff0000';
+
+        board.innerHTML += `
+            <div class="post-it ${colorClass} p-8 h-72 flex flex-col justify-between rounded-sm relative group"
+                 style="transform: rotate(${rotation}deg)">
+                <div class="pin" style="background: ${pinColor}"></div>
+                <button onclick="deleteNote(${n.id})" class="absolute top-2 right-2 text-black/10 hover:text-red-600 opacity-0 group-hover:opacity-100 transition font-bold text-xl">✕</button>
+                <div>
+                    <span class="text-[10px] uppercase tracking-tighter opacity-40 font-sans font-bold">${n.categoria || 'Tareas'}</span>
+                    <h3 class="text-2xl font-bold border-b border-black/10 mb-2 pb-1">${n.titulo}</h3>
+                    <p class="text-xl overflow-hidden leading-tight">${n.contenido}</p>
+                </div>
+                <div class="text-[10px] opacity-40 font-mono mt-4">${n.fecha || ''}</div>
+            </div>
+        `;
+      });
+    }
+
+    async function saveNote() {
+      const titulo = document.getElementById('notion-title').value;
+      const contenido = document.getElementById('notion-content').value;
+      const categoria = document.getElementById('notion-category').value;
+      if (!titulo) return alert("¡Necesitas un título!");
+
+      await fetch('/api/notas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ titulo, contenido, categoria })
+      });
+
+      closeModal();
+      document.getElementById('notion-title').value = '';
+      document.getElementById('notion-content').value = '';
+      fetchNotes(currentFilter);
+    }
+
+    async function deleteNote(id) {
+      if (confirm('¿Borrar este Post-it?')) {
+        await fetch(`/api/notas/${id}`, { method: 'DELETE' });
+        fetchNotes(currentFilter);
+      }
+    }
+
+    fetchNotes();
+  </script>
+</body>
+
+</html>
