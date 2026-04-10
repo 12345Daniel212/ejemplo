@@ -1,0 +1,190 @@
+/* =========================================
+   PUNTO TUESTE - MODO GRIS TÉCNICO (V3)
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@100;300;400;700;900&family=Reenie+Beanie&display=swap');
+
+:root {
+  /* Paleta de Grises Recuperada */
+  --bg-main: #121212;      /* Gris muy oscuro, no negro */
+  --bg-card: #1a1a1a;      /* Gris ligeramente más claro para bloques */
+  --line-color: #2a2a2a;   /* Líneas de guía más visibles */
+  --gold: #C5A059;
+  --text-main: #f0f0f0;
+  --text-dim: #a0a0a0;
+  --font-tag: 'Reenie Beanie', cursive;
+  --font-main: 'Montserrat', sans-serif;
+  --font-title: 'Cinzel', serif;
+}
+
+/* 1. BASE */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* 2. NAVEGACIÓN */
+.main-nav {
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    background: rgba(18, 18, 18, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-color);
+}
+.nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 5%; }
+.brand a { text-decoration: none; color: white; font-family: var(--font-title); font-weight: 900; font-size: 1.1rem; letter-spacing: 1px; }
+.brand span { color: var(--gold); }
+.nav-links { list-style: none; display: flex; gap: 30px; }
+.nav-links a { text-decoration: none; color: white; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+
+/* 3. HERO (CON EL FONDO DE TAZAS) */
+.hero-premium {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+    background: linear-gradient(rgba(18,18,18,0.5), var(--bg-main)),
+                url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1600') center/cover no-repeat;
+}
+.hero-content h1 { font-family: var(--font-title); font-size: 4.5rem; line-height: 1; margin-bottom: 20px; text-transform: uppercase; }
+.hero-subtitle { color: var(--gold); font-family: var(--font-title); font-size: 1rem; letter-spacing: 6px; display: block; margin-bottom: 10px; }
+.hero-content p { max-width: 550px; color: var(--text-dim); margin-bottom: 40px; font-size: 1rem; }
+
+/* GRID DE DATOS TÉCNICOS (HERO) */
+.cafe-data-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--line-color);
+    background: rgba(40, 40, 40, 0.3);
+    margin-top: 50px;
+}
+.data-item { padding: 25px; border-right: 1px solid var(--line-color); }
+.data-item:last-child { border-right: none; }
+.data-item strong { display: block; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
+.data-item span { font-size: 0.85rem; font-weight: 500; text-transform: uppercase; }
+
+/* 4. SECCIONES Y ESTRUCTURA */
+.section { padding: 140px 0; border-bottom: 1px solid var(--line-color); }
+.container { max-width: 1400px; margin: 0 auto; border-left: 1px solid var(--line-color); border-right: 1px solid var(--line-color); }
+
+.kit-grid, .config-wrapper, .b2b-box { display: grid; grid-template-columns: 1fr 1fr; }
+.kit-info, .product-preview, .b2b-info { padding: 80px 8%; border-right: 1px solid var(--line-color); }
+.kit-visual, .config-controls, .b2b-calc { padding: 80px 8%; background: var(--bg-card); }
+
+/* TIPOGRAFÍA DE DETALLE */
+.num-detail { font-family: var(--font-tag); font-size: 2.5rem; color: var(--gold); display: block; }
+.cinzel-font { font-family: var(--font-title); font-size: 2.8rem; margin-bottom: 20px; line-height: 1.1; }
+
+/* 5. CONFIGURADOR (PERSONALIZAR) */
+.bag-display {
+    background: #0e0e0e;
+    padding: 60px 20px;
+    border: 1px solid var(--line-color);
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrado horizontal */
+    justify-content: center; /* Centrado vertical */
+    min-height: 500px; /* Asegura espacio para la bolsa grande */
+}
+
+.bag-display img {
+    width: 100%;
+    max-width: 320px; /* Ajustado para que se vea imponente pero quepa */
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+.live-label {
+    margin-top: 30px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    color: var(--gold);
+    text-transform: uppercase;
+}
+
+.control-box { margin-bottom: 40px; }
+.control-box label { display: block; font-size: 0.7rem; font-weight: 800; color: #666; margin-bottom: 15px; letter-spacing: 2px; }
+
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-select {
+    background: transparent;
+    border: 1px solid #444;
+    color: white;
+    padding: 12px 20px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: 0.3s;
+}
+.btn-select.active { background: white; color: black; border-color: white; }
+
+.molienda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.molienda-card { background: #151515; padding: 15px; border: 1px solid #333; text-align: center; cursor: pointer; }
+.molienda-card.active { border-color: var(--gold); background: #222; }
+.molienda-card span { font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; }
+
+.price-box { font-size: 5rem; font-weight: 900; text-align: center; padding: 20px 0; letter-spacing: -3px; }
+
+/* 6. MAYOREO (B2B) */
+.b2b-calc { background: #151515; border: 1px solid var(--line-color); }
+input[type=range] { width: 100%; accent-color: var(--gold); margin: 30px 0; }
+.kg-display { font-size: 5rem; font-weight: 900; text-align: right; color: white; line-height: 1; }
+.results { display: flex; justify-content: space-between; margin-top: 40px; border-top: 1px solid #333; padding-top: 25px; }
+.res-item h4 { font-size: 2.2rem; font-weight: 800; color: var(--gold); }
+.res-item small { font-size: 0.65rem; letter-spacing: 1px; color: #777; font-weight: 700; }
+
+/* 7. BOTONES */
+.btn-main, .btn-whatsapp, .btn-b2b {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    transition: 0.4s;
+}
+.btn-whatsapp:hover { background: var(--gold); border-color: var(--gold); color: black; }
+.btn-b2b { background: white; color: black; border: none; }
+.btn-main { width: auto; display: inline-block; padding: 20px 40px; }
+
+/* 8. FOOTER Y CIERRE */
+.cierre-experiencia { padding: 140px 10%; text-align: center; background: #0a0a0a; border-bottom: 1px solid var(--line-color); }
+.cierre-experiencia h3 { font-family: var(--font-title); font-size: 3rem; margin-bottom: 20px; }
+.cierre-experiencia p { color: var(--text-dim); max-width: 650px; margin: 0 auto 50px auto; font-size: 1.1rem; }
+
+.footer-main { background: #050505; padding: 100px 10% 40px 10%; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; max-width: 1200px; margin: 0 auto 80px auto; }
+.foot-col h4 { font-family: var(--font-title); font-size: 0.75rem; color: var(--gold); margin-bottom: 30px; letter-spacing: 3px; }
+.foot-col li { list-style: none; margin-bottom: 12px; font-size: 0.85rem; color: #666; }
+.foot-col a { color: inherit; text-decoration: none; transition: 0.3s; }
+.foot-col a:hover { color: white; }
+
+.copyright { text-align: center; border-top: 1px solid #1a1a1a; padding-top: 40px; font-size: 0.6rem; color: #444; letter-spacing: 3px; }
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+    .kit-grid, .config-wrapper, .b2b-box, .footer-grid, .cafe-data-grid { grid-template-columns: 1fr; }
+    .hero-content h1 { font-size: 2.8rem; }
+    .nav-links { display: none; }
+    .kit-info, .product-preview, .b2b-info { border-right: none; border-bottom: 1px solid var(--line-color); padding: 60px 5%; }
+    .footer-grid { text-align: center; }
+    .bag-display { min-height: 400px; }
+}

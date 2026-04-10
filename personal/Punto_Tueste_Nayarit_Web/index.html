@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punto Tueste | Café de Especialidad Nayarita</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <nav class="main-nav">
+    <div class="nav-container">
+      <div class="brand"><a href="#">PUNTO <span>TUESTE</span> NAYARIT</a></div>
+      <ul class="nav-links">
+        <li><a href="#01">01 KIT TOSTADO</a></li>
+        <li><a href="#02">02 PERSONALIZAR</a></li>
+        <li><a href="#03">03 MAYOREO</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero-premium">
+    <div class="hero-content">
+      <span class="hero-subtitle">NAYARIT, MÉXICO</span>
+      <h1>CIENCIA,<br>FUEGO Y ORIGEN</h1>
+      <p>Tostaduría artesanal en Tepic. Llevamos el perfilado técnico a tu taza, resaltando las notas únicas de las
+        tierras nayaritas.</p>
+      <a href="#02" class="btn-main">CREAR MI PERFIL DE TUESTE</a>
+
+      <div class="cafe-data-grid">
+        <div class="data-item"><strong>Origen</strong><span>El Malinal, Xalisco</span></div>
+        <div class="data-item"><strong>Altura</strong><span>1,100 msnm</span></div>
+        <div class="data-item"><strong>Proceso</strong><span>Lavado / Natural</span></div>
+        <div class="data-item"><strong>Notas</strong><span>Frutas y Avellanas</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="01" class="section">
+    <div class="container">
+      <div class="kit-grid">
+        <div class="kit-info">
+          <span class="num-detail">01</span>
+          <h2 class="cinzel-font">Aprende a tostar en casa</h2>
+          <h3>Kit de Tostado en Sartén</h3>
+          <p>La forma más pura de entender el café es transformándolo tú mismo. Este kit contiene lo necesario para tu
+            primer tueste artesanal.</p>
+          <ul class="clean-list">
+            <li><strong>100g de Café Verde:</strong> Grano premium listo para el fuego.</li>
+            <li><strong>QR Instrucciones:</strong> Video tutorial paso a paso para sartén.</li>
+            <li><strong>Muestras de Referencia:</strong> 10g Claro, 10g Medio y 10g Oscuro.</li>
+          </ul>
+          <div class="price-tag">Inversión: <span>$200</span></div>
+          <a href="https://wa.me/523111026504?text=Me+interesa+el+Kit+de+Tostado+en+Sartén" class="btn-whatsapp">PEDIR
+            MI KIT</a>
+        </div>
+        <div class="kit-visual">
+          <img src="kit.png" alt="Kit de tostado" style="width: 600px; height: auto; display: block; margin: 0 auto;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="02" class="section">
+    <div class="container">
+      <div class="config-wrapper">
+        <div class="product-preview">
+          <span class="num-detail">02</span>
+          <h2 class="cinzel-font">Tu café a medida</h2>
+          <div class="bag-display">
+            <img src="fotocafe.png" alt="Bolsa Cafe" id="coffee-bag"
+              style="width: 600px !important; min-width: 550px !important; height: auto; display: block; margin: 0 auto;">
+            <p class="live-label"><span id="display-size">250G</span> / <span id="display-roast">MEDIO</span> / <span
+                id="display-grind">GRANO</span></p>
+          </div>
+        </div>
+        <div class="config-controls">
+          <div class="control-box">
+            <label>1. ELIGE EL TAMAÑO</label>
+            <div class="btn-group" id="size-options">
+              <button class="btn-select active" data-val="250g" data-price="150">250G</button>
+              <button class="btn-select" data-val="500g" data-price="210">500G</button>
+              <button class="btn-select" data-val="1kg" data-price="340">1KG</button>
+            </div>
+          </div>
+
+          <div class="control-box">
+            <label>2. NIVEL DE TUESTE</label>
+            <div class="btn-group" id="roast-options">
+              <button class="btn-select" data-val="Ligero">LIGERO</button>
+              <button class="btn-select active" data-val="Medio">MEDIO</button>
+              <button class="btn-select" data-val="Oscuro">OSCURO</button>
+            </div>
+          </div>
+
+          <div class="control-box">
+            <label>3. TIPO DE MOLIENDA (+ $20 excepto Grano)</label>
+            <div class="molienda-grid">
+              <div class="molienda-card active" data-val="Grano" data-extra="0"><span>GRANO</span></div>
+              <div class="molienda-card" data-val="Fina" data-extra="20"><span>ESPRESSO</span></div>
+              <div class="molienda-card" data-val="Media" data-extra="20"><span>GOTEO</span></div>
+              <div class="molienda-card" data-val="Gruesa" data-extra="20"><span>PRENSA</span></div>
+            </div>
+          </div>
+
+          <div class="price-box">Total: $<span id="final-price">150</span>.00</div>
+          <button class="btn-whatsapp" id="btn-order">ORDENAR PEDIDO</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="03" class="section">
+    <div class="container">
+      <div class="b2b-box">
+        <div class="b2b-info">
+          <span class="num-detail">03</span>
+          <h2 class="cinzel-font">Precios para Negocio</h2>
+          <p>Si consumes más de 5 kilos al mes, accede a nuestra tarifa de mayoreo. Mejora tu margen comprando directo
+            de tostaduría.</p>
+          <ul class="check-list">
+            <li>Tueste semanal bajo pedido.</li>
+            <li>Asesoría en perfiles de extracción.</li>
+            <li>Envío local en Tepic.</li>
+          </ul>
+        </div>
+        <div class="b2b-calc">
+          <label>VOLUMEN (KILOS AL MES)</label>
+          <div class="kg-display"><span id="kg-output">5</span> KG</div>
+          <input type="range" id="b2b-range" min="5" max="50" value="5" step="1">
+          <div class="results">
+            <div class="res-item">
+              <small>COSTO MAYOREO / KG</small>
+              <h4 id="b2b-u-price">$280</h4>
+            </div>
+            <div class="res-item">
+              <small>TU AHORRO VS MENUDEO</small>
+              <h4 id="b2b-saving">$300</h4>
+            </div>
+          </div>
+          <button class="btn-b2b">SOLICITAR COTIZACIÓN</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-main">
+    <div class="footer-grid">
+      <div class="foot-col">
+        <h4>PUNTO TUESTE</h4>
+        <p>Ciencia, Fuego y Origen.<br>Tepic, Nayarit, México.</p>
+      </div>
+      <div class="foot-col">
+        <h4>EXPLORA</h4>
+        <ul>
+          <li><a href="#01">Kit Tostado</a></li>
+          <li><a href="#02">Personalizar</a></li>
+          <li><a href="#03">Mayoreo</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>SÍGUENOS</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="https://wa.me/523111026504">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">© 2024 PUNTO TUESTE. TODOS LOS DERECHOS RESERVADOS.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

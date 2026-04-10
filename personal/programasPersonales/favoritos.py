@@ -87,5 +87,5 @@ def guardar_favoritos_desde_inicio(ruta_excel):
     print(f">>> Revisa '{archivo_errores}' para ver los domicilios que faltaron.")
 
 # Ruta del archivo
-archivo_ruta = r"C:\Users\rodri\Downloads\DANY 260313 PUERTA DE LA LAGUNA (162).xlsx"
+archivo_ruta = r"C:\Users\rodri\Downloads\DANY 260331 ADOLFO LOPEZ MATEOS (41).xlsx"
 guardar_favoritos_desde_inicio(archivo_ruta)
