@@ -1,6 +1,12 @@
-import javax.swing.*;
-import java.awt.*;
+    import java.awt.Color;
 import java.util.Random;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class CarreraHilos extends JFrame {
     private JButton btnIniciar;

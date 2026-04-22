@@ -1,0 +1,30 @@
+[
+  {
+    "musculo": "pecho",
+    "exercise": ["Press de banca plano", "Press inclinado con mancuernas", "Flexiones de brazos", "Aperturas con mancuernas", "Cruce de poleas", "Fondos en paralelas", "Press declinado", "Pec Deck", "Pullover con mancuerna", "Flexiones diamante"]
+  },
+  {
+    "musculo": "espalda",
+    "exercise": ["Dominadas", "Remo con barra", "Remo con mancuernas", "Jalones al pecho", "Peso muerto", "Remo en máquina", "Pull-over en polea alta", "Remo invertido", "Remo con barra T", "Jalones con agarre estrecho"]
+  },
+  {
+    "musculo": "piernas",
+    "exercise": ["Sentadillas", "Prensa de piernas", "Zancadas", "Peso muerto rumano", "Extensiones de piernas", "Curl de piernas", "Elevaciones de talones", "Sentadillas búlgaras", "Abducción de cadera en máquina", "Adducción de cadera en máquina"]
+  },
+  {
+    "musculo": "hombros",
+    "exercise": ["Press militar con barra", "Press militar con mancuernas", "Elevaciones laterales", "Elevaciones frontales", "Pájaros con mancuernas", "Remo al mentón", "Press Arnold", "Elevaciones posteriores en máquina", "Face Pulls", "Encogimientos de hombros"]
+  },
+  {
+    "musculo": "biceps",
+    "exercise": ["Curl con barra", "Curl con mancuernas", "Curl en banco inclinado", "Curl de concentración", "Curl de predicador", "Curl con cable", "Curl martillo", "Curl inverso", "Curl 21s", "Curl con barra Z"]
+  },
+  {
+    "musculo": "triceps",
+    "exercise": ["Press de banca con agarre cerrado", "Fondos en paralelas", "Extensiones de tríceps con mancuernas", "Extensiones de tríceps en polea alta", "Press francés con barra", "Press francés con mancuernas", "Extensiones de tríceps con cuerda", "Patada de tríceps con mancuernas", "Press de banca declinado con agarre cerrado", "Extensiones de tríceps en máquina"]
+  },
+  {
+    "musculo": "abdominales",
+    "exercise": ["Crunch abdominal", "Elevaciones de piernas colgado", "Plancha", "Abdominales bicicleta", "Crunch inverso", "Elevaciones de piernas en banco", "Plancha lateral", "Abdominales con rueda", "Crunch con cable", "Elevaciones de piernas con balón suizo"]
+  }
+]

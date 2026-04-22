@@ -99,6 +99,7 @@ def guardar_favoritos_con_nota(ruta_excel):
 
     print(f"\n>>> ¡PROCESO TERMINADO! <<<")
 
+
 # Ejecución
 archivo_ruta = r"C:\Users\rodri\Downloads\DANI 260409 aval.xlsx"
 guardar_favoritos_con_nota(archivo_ruta)
