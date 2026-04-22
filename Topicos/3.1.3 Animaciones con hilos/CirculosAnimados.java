@@ -5,138 +5,118 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 public class CirculosAnimados extends JFrame {
 
-   //Botones para la ventana
-   private JButton iniciarBoton;
-   private JButton detenerBoton;
+    private JButton iniciarBoton;
+    private JButton detenerBoton;
+    private PanelDibujo panel;
 
-   //Panel para dibujar añadido al centro de la ventana
-   PanelDibujo panel;
+    // Usamos una lista sincronizada y guardamos los hilos para poder interrumpirlos
+    private List<CirculoAnimado> circulos = Collections.synchronizedList(new ArrayList<>());
+    private List<Thread> hilos = Collections.synchronizedList(new ArrayList<>());
 
-   //Lista de circulos
-   private ArrayList<CirculoAnimado> circulos = new ArrayList<CirculoAnimado>();
+    public CirculosAnimados() {
+        inicializarComponentes();
+    }
 
-   public CirculosAnimados() {
-      inicializarComponentes();
-   }
+    public void inicializarComponentes() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 400);
+        setTitle("Hilos - Interrupción de Hilos Dormidos");
+        setLayout(new BorderLayout());
 
-   public void inicializarComponentes(){
-      //Configuración inicial del JFrame
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setSize(400, 400);
-      setTitle("Hilos");
-      setLayout(new BorderLayout());
+        panel = new PanelDibujo();
+        add(panel, BorderLayout.CENTER);
 
-      //Panel para dibujar añadido al centro de la ventana
-      panel = new PanelDibujo();
-      add(panel, BorderLayout.CENTER);
+        JPanel panelBotones = new JPanel();
+        add(panelBotones, BorderLayout.SOUTH);
 
-      //Panel para los botones añadido al sur de la ventana
-      JPanel panelBotones = new JPanel();
-      add(panelBotones, BorderLayout.SOUTH);
+        detenerBoton = new JButton("Detener");
+        iniciarBoton = new JButton("Iniciar");
 
-      //Creación de botones
-      detenerBoton = new JButton("Detener");
-      iniciarBoton = new JButton("Iniciar");
+        panelBotones.add(iniciarBoton);
+        panelBotones.add(detenerBoton);
 
-      //Botones añadidios al panel inferior
-      panelBotones.add(iniciarBoton);
-      panelBotones.add(detenerBoton);
-
-      iniciarBoton.addActionListener(e -> {
-
-        CirculoAnimado c = new CirculoAnimado(panel);
+        iniciarBoton.addActionListener(e -> {
+            CirculoAnimado c = new CirculoAnimado(panel);
             circulos.add(c);
-
             Thread hilo = new Thread(c);
-
+            hilos.add(hilo);
             hilo.start();
-         });
-
-      detenerBoton.addActionListener(e -> {
-          circulos.clear();
-          panel.repaint(); // Limpiar el panel al detener la animación
         });
-   }
 
-      //Clase anidada PanelDibujo
-   public class PanelDibujo extends JPanel{
-      @Override
-      public void paintComponent(Graphics g){
-         super.paintComponent(g);
+        detenerBoton.addActionListener(e -> {
+            for (Thread h : hilos) {
+                h.interrupt();
+            }
+            hilos.clear();
+            circulos.clear();
+            panel.repaint();
+        });
+    }
 
-         //Se define el color del círculo
-         g.setColor(Color.RED);
+    public class PanelDibujo extends JPanel {
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.RED);
 
-         //Se recorre todo el arreglo de círculos, y se dibuja cada uno de éstos
-         for (int i = 0; i < circulos.size(); i ++){
-            int tamano = circulos.get(i).getTamano();
-            g.drawOval(this.getWidth()/2-(tamano/2), this.getHeight()/2-(tamano/2), tamano, tamano);
-         }
+            synchronized(circulos) {
+                for (CirculoAnimado c : circulos) {
+                    int tamano = c.getTamano();
+                    g.drawOval(getWidth()/2 - (tamano/2), getHeight()/2 - (tamano/2), tamano, tamano);
+                }
+            }
+            repaint();
+        }
+    }
 
-         //Agregar aquí la llamada al método repaint() una vez que hayas añadido hilos.
-         repaint(); // Esto hará que el panel se vuelva a dibujar cada vez que se actualice el tamaño de los círculos
-
-      }
-   }//Fin clase PanelDibujo
-
-   public static void main(String args[]){
-      new CirculosAnimados().setVisible(true);
-   }
+    public static void main(String args[]) {
+        new CirculosAnimados().setVisible(true);
+    }
 }
 
-
-//////////////////////////////////////////////////////////////////////////
-// Clase modificada para implementar Runnable
 class CirculoAnimado implements Runnable {
+    private int tamano;
+    private JPanel panel;
 
-   //Variable para el tamaño del círculo
-   private int tamano;
+    public CirculoAnimado(JPanel panel) {
+        this.panel = panel;
+        tamano = 10;
+    }
 
-   //Panel donde se dibuja el cículo
-   private JPanel panel;
+    public int getTamano() {
+        return tamano;
+    }
 
-   //Constructor del círculo
-   public CirculoAnimado(JPanel panel){
-      this.panel = panel;
-      tamano = 10;
-   }
+    @Override
+    public void run() {
+        animar();
+    }
 
-   //Método que retorna el tamaño de la circunferencia del círculo
-   public int getTamano(){
-      return tamano;
-   }
-   // El método run es el punto de entrada para el hilo
-   @Override
-   public void run() {
-       animar();
-   }
+    public void animar() {
+        int inc = 1;
+        tamano = 10;
 
-   public void animar(){
-      //incremento del tamaño del círculo
-      int inc = 1;
+        while (!Thread.currentThread().interrupted()) {
+            try {
 
-      //Tamaño inicial del círculo
-      tamano = 10;
+                Thread.sleep(10);
 
-      //Se realiza la animación mediante el ciclo while infinito
-      while (true){
-         // Esto es más seguro y eficiente en aplicaciones gráficas
-         //panel.repaint();
+                if (tamano < 10 || tamano > panel.getHeight()) {
+                    inc = -inc;
+                }
+                tamano += inc;
 
-         try {
-             Thread.sleep(2); // Aumenté a 10ms para que sea más fluido y menos pesado
-         } catch(Exception ex) {
-             break; // Si el hilo se interrumpe, salimos del bucle
-         }
+            } catch (InterruptedException ex) {
+                // EXPLICACIÓN DE LA ACTIVIDAD:
 
-         if (tamano < 10 || tamano > panel.getHeight()){
-            inc = -inc;
-         }
-
-         tamano += inc;
-      }
-   }
+                Thread.currentThread().interrupt();
+                System.out.println("Hilo interrumpido mientras dormia. Finalizando...");
+            }
+        }
+    }
 }

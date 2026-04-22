@@ -1,0 +1,36 @@
+la iteracion es un proceso repetitivo que busca generar una secuencia de aproximaciones partiendo de un valor, con el fin de llegar a la solucion del
+problema. La convergencia ocurre cuando, a medida que aumenta el numero de iteraciones(n) los valores cualculados tienden hacia la solucion verdadera o
+real del sistema.
+
+acontinuacacion se detallan los aspectos claves de estos aspectos:
+
+1.- mecanica de los metodos iterativos a diferencia de los metodos de eliminacion como gauss que buscan un metodo de eliminacion directa los metodos
+iterativos (como gauss seide y jacobi) despejan cada variable de su respectiva ecuacion para crear una formula de recurrencia.
+
+METODO DE GAUSS SEIDE:
+
+es el mas utilizado, su caracteristica principal es que, una vez calculado un nuevo valor para una nueva valirable este se utiliza inmediatamente en la misma
+iteracion para determinar los valores de las siguientes incognitas.
+
+
+METODO DE JACOBI:
+
+a diferencia del anterior este metodo retiere los valores de la iteracion previa y los usa para calcular todo el conjunto de new aproximaciones simultaneamente; es decir,
+no usa los valores actualizados, hasta la siguiente iteracion.
+
+2.- criterios de convergencia, no todos lo sistemas de ecuacoines convergen mediante metodos iterativos. Para garantizar que el proceso llegue a la solucion se aplican los siguientes
+principios:
+
+matriz diagonalmente dominante: es un requisito fundamental paa garantizar la convergencia en los metodos de jacoboi y gauss seide. Una matriz es estrictamanete dominante en sentido
+diagonal si el valor absoluto del elemento en la diagonal principial de cada final es mayor que la suma de los valores absolutos de los demas elementos de esa misma fila.
+
+Sistemas no lineales, en sistemas mas try hards (como los resueltos con el metodo ......) la convergencia depende de que los valores iniciales sea los suficientemente cercanos a la sol.
+verdadera para evitar que el metodo diverja.
+
+
+3.- CRITERIO DETERMINACION O PARO
+Se utliza el error relativo porcentual aproximado, este e calcula comparando la aprox de la iteraicion actuañ con la de iteracion anterior
+
+Ea = | aprox act - aprox ant / aprox inicial| * 100 %
+
+el calculo temrinar cuando el valor abosulto es menor que una tolerancia prefijada (Ef)

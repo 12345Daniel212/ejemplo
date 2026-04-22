@@ -1,0 +1,60 @@
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+class InterrumpirHilos extends JFrame{
+
+   private Thread t;
+
+   ///////////////////////////////////////////////////////////////
+   public InterrumpirHilos(){
+
+      this.setSize(200, 200);
+      this.setLayout(new FlowLayout());
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+      JButton iniciarBoton = new JButton("Iniciar hilo");
+      this.add(iniciarBoton);
+
+      JButton detenerBoton = new JButton("Detener hilo");
+      this.add(detenerBoton);
+
+      iniciarBoton.addActionListener(e -> {
+            Hilo h = new Hilo();
+            t = new Thread(h);
+            t.start();
+         }
+      );
+
+      detenerBoton.addActionListener(e -> {
+            t.stop();
+            System.out.println("Hilo detenido.");
+         }
+      );
+   }
+
+   ///////////////////////////////////////////////////////////////
+   public static void main(String args[]){
+      new InterrumpirHilos().setVisible(true);
+   }
+}
+
+///////////////////////////////////////////////////////////////////////
+class Hilo implements Runnable{
+
+   private static int hilos = 0;
+   private int numeroHilo;
+
+   public Hilo() {
+      hilos++;
+      numeroHilo = hilos;
+   }
+
+   public void run(){
+      while(true){
+         System.out.println("Hilo " + numeroHilo + " en ejecución...");
+      }
+   }
+}
