@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "PruebaConexion",
+      "request": "launch",
+      "mainClass": "PruebaConexion",
+      "projectName": "ejemplo_656a84f0"
+    },
+    {
+      "type": "java",
       "name": "memoria5bPro",
       "request": "launch",
       "mainClass": "memoria5bPro",

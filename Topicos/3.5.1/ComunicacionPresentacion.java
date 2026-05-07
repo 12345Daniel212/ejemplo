@@ -29,6 +29,7 @@ class Almacen {
     }
 }
 
+
 class Fabrica implements Runnable {
     Almacen almacen;
 
@@ -37,25 +38,20 @@ class Fabrica implements Runnable {
     }
 
     public void run() {
-       // Simulamos la producción de 3 productos
        for(int i = 0; i < 3; i++) {
            synchronized(almacen) {
               System.out.println("Fábrica: Construyendo producto " + (i+1) + "...");
-              try { Thread.sleep(2000); } catch(Exception e){ } // Tarda 2 segundos
+              try { Thread.sleep(1000); } catch(Exception e){ }
 
               almacen.agregar();
 
-              // Notifica a la Tienda que ya puede despertar
               System.out.println("Fábrica: Notificando a la tienda...");
-              almacen.notify();
+              almacen.notify(); // se notifica que ya se creo el producto para que tienda salga de wait
            }
-           // Pausa pequeña fuera del synchronized para dejar que la tienda entre
-           try { Thread.sleep(500); } catch(Exception e){ }
        }
     }
 }
 
-////////////////////////////////////////////////////////
 class Tienda implements Runnable {
     Almacen almacen;
 

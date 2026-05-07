@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- CONFIGURADOR DE PRODUCTO ---
+    // --- 1. CONFIGURADOR DE PRODUCTO (MENUDEO) ---
     const sizeBtns = document.querySelectorAll('#size-options .btn-select');
     const roastBtns = document.querySelectorAll('#roast-options .btn-select');
     const grindCards = document.querySelectorAll('.molienda-card');
     const priceDisplay = document.getElementById('final-price');
 
-    // Estado inicial corregido: 250g, Medio, Grano (Precio Retail base $150)
-    let retailBase = 150, // Precio para 250g
-        grindExtra = 0,    // Grano no cobra extra
+    // Estado inicial: 250g, Medio, Grano
+    let retailBase = 150,
+        grindExtra = 0,
         szVal = "250g",
         rstVal = "MEDIO",
         grdVal = "GRANO";
@@ -16,13 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateRetailPrice() {
         const total = retailBase + grindExtra;
         priceDisplay.innerText = total;
-        // Actualizar etiqueta en vivo
-        document.getElementById('display-size').innerText = szVal.toUpperCase();
-        document.getElementById('display-roast').innerText = rstVal;
-        document.getElementById('display-grind').innerText = grdVal;
+
+        // Actualizar etiquetas visuales en la bolsa
+        if (document.getElementById('display-size'))
+            document.getElementById('display-size').innerText = szVal.toUpperCase();
+        if (document.getElementById('display-roast'))
+            document.getElementById('display-roast').innerText = rstVal;
+        if (document.getElementById('display-grind'))
+            document.getElementById('display-grind').innerText = grdVal;
     }
 
-    // Lógica de Selección de Tamaño (Recuperada)
+    // Selección de Tamaño
     sizeBtns.forEach(btn => btn.addEventListener('click', () => {
         document.querySelector('#size-options .btn-select.active').classList.remove('active');
         btn.classList.add('active');
@@ -31,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateRetailPrice();
     }));
 
-    // Lógica de Tueste
+    // Selección de Tueste
     roastBtns.forEach(btn => btn.addEventListener('click', () => {
         document.querySelector('#roast-options .btn-select.active').classList.remove('active');
         btn.classList.add('active');
@@ -39,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateRetailPrice();
     }));
 
-    // Lógica de Molienda
+    // Selección de Molienda
     grindCards.forEach(card => card.addEventListener('click', () => {
         document.querySelector('.molienda-card.active').classList.remove('active');
         card.classList.add('active');
@@ -48,33 +52,59 @@ document.addEventListener('DOMContentLoaded', () => {
         updateRetailPrice();
     }));
 
-    // Botón Ordenar (WhatsApp)
-    document.getElementById('btn-order').addEventListener('click', () => {
-        const finalPrice = retailBase + grindExtra;
-        const msg = encodeURIComponent(`¡Hola Punto Tueste! Me interesa el pedido personalizado: Bolsa de ${szVal}, tueste ${rstVal}, molienda ${grdVal}. Total: $${finalPrice}`);
-        window.open(`https://wa.me/523111026504?text=${msg}`);
-    });
+    // Botón Ordenar WhatsApp
+    const btnOrder = document.getElementById('btn-order');
+    if (btnOrder) {
+        btnOrder.addEventListener('click', () => {
+            const finalPrice = retailBase + grindExtra;
+            const msg = encodeURIComponent(`¡Hola Punto Tueste! Me interesa el pedido personalizado: Bolsa de ${szVal}, tueste ${rstVal}, molienda ${grdVal}. Total: $${finalPrice}`);
+            window.open(`https://wa.me/523111026504?text=${msg}`);
+        });
+    }
 
 
-    // --- CALCULADORA DE MAYOREO (CORREGIDA: Inicia en 5kg) ---
+    // --- 2. CALCULADORA DE MAYOREO (LA BARRITA) ---
     const slider = document.getElementById('b2b-range');
-    const RETAIL_KG_REF = 340; // Referencia de precio menudeo por 1kg
+    const kgOutput = document.getElementById('kg-output');
+    const uPriceDisplay = document.getElementById('b2b-u-price');
+    const savingDisplay = document.getElementById('b2b-saving');
 
-    slider.addEventListener('input', (e) => {
-        const kg = parseInt(e.target.value);
-        let precioMayoreo;
+    // Referencia de precio menudeo para calcular el ahorro
+    const RETAIL_KG_REF = 430;
 
-        // Escala de precios mayoreo
-        if(kg >= 30) precioMayoreo = 220;
-        else if(kg >= 15) precioMayoreo = 245;
-        else if(kg >= 10) precioMayoreo = 260;
-        else precioMayoreo = 280; // Precio base para pedidos pequeños de mayoreo (5kg+)
+    if (slider) {
+        slider.addEventListener('input', () => {
+            const kg = parseInt(slider.value);
+            let precioMayoreo;
 
-        // Cálculo de ahorro vs menudeo ($340 x kg)
-        const ahorro = (RETAIL_KG_REF - precioMayoreo) * kg;
+            // Escala de precios de mayoreo (Ajustada proporcionalmente al nuevo precio de $430)
+            if (kg >= 30) {
+                precioMayoreo = 310;
+            } else if (kg >= 15) {
+                precioMayoreo = 330;
+            } else if (kg >= 10) {
+                precioMayoreo = 340;
+            } else {
+                precioMayoreo = 350; // Para 5kg a 9kg
+            }
 
-        document.getElementById('kg-output').innerText = kg;
-        document.getElementById('b2b-u-price').innerText = `$${precioMayoreo}`;
-        document.getElementById('b2b-saving').innerText = `$${ahorro.toLocaleString()}`;
-    });
+            // Cálculo de ahorro: (Precio Normal $430 - Precio Mayoreo) * cantidad de kilos
+            const ahorroTotal = (RETAIL_KG_REF - precioMayoreo) * kg;
+
+            // Actualizar el HTML
+            kgOutput.innerText = kg;
+            uPriceDisplay.innerText = `$${precioMayoreo}`;
+            savingDisplay.innerText = `$${ahorroTotal.toLocaleString()}`;
+        });
+    }
+
+    // Botón Cotización Mayoreo
+    const btnB2B = document.querySelector('.btn-b2b');
+    if (btnB2B) {
+        btnB2B.addEventListener('click', () => {
+            const kg = slider.value;
+            const msg = encodeURIComponent(`¡Hola! Quisiera una cotización de mayoreo para mi negocio por un volumen aproximado de ${kg} kilos al mes.`);
+            window.open(`https://wa.me/523111026504?text=${msg}`);
+        });
+    }
 });
