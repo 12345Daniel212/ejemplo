@@ -6,11 +6,11 @@ import threading
 import urllib.parse
 import time
 import pyperclip
+import re
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -21,38 +21,35 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Maps Automation Pro - Control Total")
+        self.title("Maps Automation")
         self.geometry("900x650")
 
-        # Variables de control
         self.running = False
         self.paused = False
         self.filepath = None
         self.driver = None
 
-        # --- PANEL IZQUIERDO (Controles) ---
+        # --- Interfaz (Panel Izquierdo) ---
         self.left_panel = ctk.CTkFrame(self, width=450)
         self.left_panel.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
-        self.header = ctk.CTkLabel(self.left_panel, text="PASOS PARA INICIAR", font=("Arial", 16, "bold"))
+        self.header = ctk.CTkLabel(self.left_panel, text="INSTRUCCIONES", font=("Arial", 16, "bold"))
         self.header.pack(pady=10)
 
-        # Comando Chrome
         self.cmd_frame = ctk.CTkFrame(self.left_panel, fg_color="#333")
         self.cmd_frame.pack(fill="x", padx=15, pady=5)
-        self.cmd_label = ctk.CTkLabel(self.cmd_frame, text="1. Click en copiar\n2. Win + R\n3. Pegar y Enter", font=("Arial", 11))
+        self.cmd_label = ctk.CTkLabel(self.cmd_frame, text="1. Copiar -> 2. Win+R -> 3. Pegar y Enter", font=("Arial", 11))
         self.cmd_label.pack(pady=5)
 
         self.btn_copy = ctk.CTkButton(self.cmd_frame, text="Copiar Comando Chrome", command=self.copiar_comando, height=28)
         self.btn_copy.pack(pady=10)
 
-        self.btn_select = ctk.CTkButton(self.left_panel, text="📁 Seleccionar Excel", command=self.cargar_archivo, fg_color="#1f6aa5")
+        self.btn_select = ctk.CTkButton(self.left_panel, text="📁 Cargar Excel", command=self.cargar_archivo, fg_color="#1f6aa5")
         self.btn_select.pack(pady=15)
 
         self.status_label = ctk.CTkLabel(self.left_panel, text="Esperando archivo...", text_color="gray")
         self.status_label.pack()
 
-        # Botones de Control de Proceso
         self.controls_frame = ctk.CTkFrame(self.left_panel, fg_color="transparent")
         self.controls_frame.pack(pady=20)
 
@@ -65,23 +62,20 @@ class App(ctk.CTk):
         self.btn_stop = ctk.CTkButton(self.left_panel, text="🛑 DETENER PROCESO", command=self.stop_process, state="disabled", fg_color="red")
         self.btn_stop.pack(pady=5)
 
-        # --- PANEL DERECHO (Lista de Errores) ---
+        # --- Panel Derecho (Lista de Errores) ---
         self.right_panel = ctk.CTkFrame(self, width=400)
         self.right_panel.pack(side="right", fill="both", expand=True, padx=10, pady=10)
 
-        self.error_header = ctk.CTkLabel(self.right_panel, text="📍 PENDIENTES MANUALES", font=("Arial", 14, "bold"), text_color="#ff7b7b")
+        self.error_header = ctk.CTkLabel(self.right_panel, text="📍 PENDIENTES (NO ENCONTRADOS)", font=("Arial", 14, "bold"), text_color="#ff7b7b")
         self.error_header.pack(pady=10)
 
         self.error_box = ctk.CTkTextbox(self.right_panel, font=("Arial", 12))
         self.error_box.pack(fill="both", expand=True, padx=10, pady=10)
 
-        self.btn_clear_log = ctk.CTkButton(self.right_panel, text="Limpiar Lista", command=lambda: self.error_box.delete("1.0", "end"), height=20, fg_color="#444")
-        self.btn_clear_log.pack(pady=5)
-
     def copiar_comando(self):
         cmd = r'chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\temp_chrome"'
         pyperclip.copy(cmd)
-        messagebox.showinfo("Copiado", "Comando copiado. Presiona Win+R y pégalo.")
+        messagebox.showinfo("Copiado", "Comando copiado. Pégalo en la ventana de Ejecutar (Win+R).")
 
     def cargar_archivo(self):
         file = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx *.xls")])
@@ -120,56 +114,61 @@ class App(ctk.CTk):
         try:
             self.driver = webdriver.Chrome(options=opts)
             wait = WebDriverWait(self.driver, 8)
-            df = pd.read_excel(self.filepath).fillna("")
+
+            df = pd.read_excel(self.filepath)
+
+            # Buscar columna "Domicilio"
+            columna_objetivo = None
+            for col in df.columns:
+                if re.search(r'domicilio', str(col), re.IGNORECASE):
+                    columna_objetivo = col
+                    break
+
+            if columna_objetivo is None:
+                messagebox.showerror("Error", "No encontré la columna 'Domicilio'.")
+                self.btn_run.configure(state="normal")
+                return
+
+            df = df.fillna("")
 
             for i, r in df.iterrows():
-                # Revisar si se presionó DETENER
                 if not self.running: break
-
-                # Revisar si está en PAUSA
                 while self.paused:
                     time.sleep(0.5)
                     if not self.running: break
 
                 try:
-                    calle = str(r.iloc[3]).strip()
-                    numero = str(r.iloc[4]).strip()
-                    colonia = str(r.iloc[5]).strip()
-                    if numero.endswith(".0"): numero = numero[:-2]
+                    direccion_cruda = str(r[columna_objetivo]).strip()
+                    if not direccion_cruda or direccion_cruda.lower() == "nan": continue
 
-                    partes = [p for p in [calle, numero, colonia] if p and p.lower() != "nan"]
-                    direccion = ", ".join(partes) + ", Tepic, Nayarit"
+                    direccion_completa = f"{direccion_cruda}, Tepic, Nayarit"
+                    self.status_label.configure(text=f"Procesando ({i+1}/{len(df)}): {direccion_cruda[:25]}...")
 
-                    self.status_label.configure(text=f"Buscando ({i+1}/{len(df)}): {calle[:20]}...")
-
-                    query = urllib.parse.quote(direccion)
+                    query = urllib.parse.quote(direccion_completa)
                     self.driver.get(f"https://www.google.com/maps/search/{query}")
 
-                    # Selenium Steps
-                    btn_guardar = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-label, 'Guardar') or contains(@aria-label, 'Save')]")))
+                    # 1. Click en Guardar
+                    xpath_guardar = "//button[contains(@aria-label, 'Guardar') or contains(@aria-label, 'Save')]"
+                    btn_guardar = wait.until(EC.element_to_be_clickable((By.XPATH, xpath_guardar)))
                     self.driver.execute_script("arguments[0].click();", btn_guardar)
                     time.sleep(1.2)
 
-                    elemento_fav = wait.until(EC.element_to_be_clickable((By.XPATH, "//div[text()='Favoritos' or text()='Favorites']")))
+                    # 2. Click en Favoritos
+                    xpath_favoritos = "//div[text()='Favoritos' or text()='Favorites']"
+                    elemento_fav = wait.until(EC.element_to_be_clickable((By.XPATH, xpath_favoritos)))
                     self.driver.execute_script("arguments[0].click();", elemento_fav)
 
-                    try:
-                        xpath_nota = "//textarea[contains(@aria-label, 'nota') or contains(@aria-label, 'note')]"
-                        campo_nota = wait.until(EC.presence_of_element_located((By.XPATH, xpath_nota)))
-                        campo_nota.send_keys("AVAL")
-                        time.sleep(0.4)
-                        campo_nota.send_keys(Keys.ENTER)
-                    except: pass
+                    # Se eliminó la sección de la nota "AVAL" por petición del usuario.
+                    time.sleep(0.5)
 
                 except Exception:
-                    # Si falla, agregar a la lista de la interfaz
-                    self.error_box.insert("end", f"• Fila {i+2}: {direccion}\n")
+                    self.error_box.insert("end", f"• Fila {i+2}: {direccion_cruda}\n")
                     self.error_box.see("end")
 
-            messagebox.showinfo("Fin", "Proceso terminado.")
+            messagebox.showinfo("Fin", "¡Proceso terminado con éxito, jefa!")
 
         except Exception as e:
-            messagebox.showerror("Error", f"¿Abriste el Chrome especial?\n{e}")
+            messagebox.showerror("Error", f"Error de conexión con Chrome.\n{e}")
 
         self.btn_run.configure(state="normal")
         self.btn_pause.configure(state="disabled")
