@@ -188,3 +188,133 @@ input[type=range] { width: 100%; accent-color: var(--gold); margin: 30px 0; }
     .footer-grid { text-align: center; }
     .bag-display { min-height: 400px; }
 }
+
+
+/* ============================================================
+   SECCIÓN RESPONSIVA CONSOLIDADA - PUNTO TUESTE (COPIAR TODO)
+   ============================================================ */
+
+@media (max-width: 900px) {
+    /* 1. AJUSTES DE ESTRUCTURA Y CUERPO */
+    body {
+        padding-top: 60px; /* Evita que el menú fijo tape el título */
+        overflow-x: hidden;
+    }
+
+    .container {
+        border-left: none;
+        border-right: none;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Forzamos que las columnas se vuelvan una sola fila vertical */
+    .config-wrapper, .kit-grid, .b2b-box, .cafe-data-grid {
+        grid-template-columns: 1fr !important;
+        display: block !important;
+    }
+
+    /* 2. HERO (INICIO) Y TÍTULOS */
+    .hero-premium {
+        height: auto;
+        min-height: 100vh;
+        padding: 100px 5% 50px 5%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem !important; /* Tamaño ajustado para pantallas móviles */
+        line-height: 1.1;
+        margin-top: 15px;
+    }
+
+    .hero-content p {
+        margin: 0 auto 30px auto;
+        font-size: 0.95rem;
+    }
+
+    /* 3. REPARACIÓN DE IMÁGENES (KIT Y BOLSA) */
+    /* Anulamos los 600px del HTML para que no desborden */
+    .kit-visual, .product-preview {
+        padding: 40px 5% !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bag-display {
+        min-height: auto !important;
+        padding: 20px 0;
+        width: 100%;
+    }
+
+    /* Regla maestra para que ninguna foto rompa el diseño */
+    .kit-visual img,
+    .bag-display img,
+    #coffee-bag {
+        width: 100% !important;
+        max-width: 300px !important; /* Tamaño ideal para teléfonos */
+        height: auto !important;
+        min-width: 0 !important;
+        display: block;
+        margin: 0 auto;
+        object-fit: contain;
+    }
+
+    /* 4. CONFIGURADOR (BOTONES Y MOLIENDA) */
+    .config-controls {
+        padding: 40px 5%;
+    }
+
+    .btn-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 botones parejos */
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .btn-select {
+        padding: 12px 5px;
+        font-size: 0.65rem;
+        width: 100%;
+    }
+
+    .molienda-grid {
+        grid-template-columns: 1fr 1fr; /* 2 columnas para molienda */
+        gap: 10px;
+    }
+
+    .price-box {
+        font-size: 3rem !important;
+        margin: 25px 0;
+    }
+
+    /* 5. DATOS TÉCNICOS Y B2B */
+    .data-item {
+        border-right: none;
+        border-bottom: 1px solid var(--line-color);
+        padding: 15px;
+    }
+
+    .kg-display {
+        font-size: 3.5rem;
+        text-align: center;
+    }
+
+    .results {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+
+/* Ajuste final para pantallas extra pequeñas (iPhone SE, etc.) */
+@media (max-width: 380px) {
+    .hero-content h1 { font-size: 1.8rem !important; }
+    .btn-group { grid-template-columns: 1fr; }
+    .price-box { font-size: 2.5rem !important; }
+}
