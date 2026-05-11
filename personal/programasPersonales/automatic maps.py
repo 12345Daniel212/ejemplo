@@ -23,7 +23,6 @@ class App(ctk.CTk):
 
         self.title("Maps Automation")
         self.geometry("900x650")
-
         self.running = False
         self.paused = False
         self.filepath = None
